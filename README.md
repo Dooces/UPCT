@@ -1,3 +1,43 @@
+Premise (Need–Cost arbitration law)
+
+An adaptive controller allocates model‑based (MB) vs model‑free (MF) control by a graded function of controller adequacy (Need) minus control price (Cost).
+Engagement of MB must increase strictly with Need and decrease strictly with Cost.
+Formal statement
+
+Need_t: a scalar, monotone measure of MB’s adequacy advantage over MF at time t.
+Valid instantiations (either class is acceptable):
+Reliability advantage: Need_t = log π_MB,t − log π_MF,t (relative precision of controllers).
+Value advantage: Need_t = (EV_MB,t − EV_MF,t) + VOI_t (expected value difference plus value of information).
+Cost_t: a scalar, monotone measure of the current price of control (time/effort/energy/opportunity).
+Valid instantiations:
+Opportunity cost: κ_t (average reward rate / time pressure).
+Physiological cost: c_phys(S_t), strictly decreasing in surplus/alertness S_t.
+Linear or affine combinations are permitted: Cost_t = k0 + k_ARR·κ_t + k_phys·c_phys(S_t).
+Arbitration (graded, bounded)
+
+w_MB(t) = σ(θ_need · z(Need_t) − θ_cost · z(Cost_t) − θ0)
+σ is the logistic; z(·) denotes z‑scoring for identifiability.
+θ_need > 0 and θ_cost > 0 are required (strict monotonicity).
+Execution and learning (standard)
+
+Action selection: Q_mix = (1 − w_MB) Q_MF + w_MB Q_MB; π(a|s) ∝ exp(Q_mix/τ)
+Online patch (MB→MF): Q_MF ← Q_MF + η_patch_eff · (Q_MB − Q_MF) (down‑weight when MB is epistemically uncertain)
+Offline distillation: minimize KL(π_MB || π_MF) over prioritized states
+Non‑negotiable monotonic predictions (falsifiable)
+
+Under validated Cost clamps, increasing Need must increase w_MB (∂w_MB/∂Need > 0).
+Under validated Need clamps, increasing Cost must decrease w_MB (∂w_MB/∂Cost < 0).
+The structured Need–Cost model must outperform MF‑only, MB‑only, and a flexible free‑w mixture in out‑of‑sample prediction.
+What is variable (but not vague)
+
+You may choose a reliability‑based or value+VOI‑based Need, provided it is a valid monotone adequacy measure.
+You may choose κ_t, c_phys(S_t), or their affine combination for Cost, provided it is a valid monotone control‑price measure.
+These are “slots.” Swapping a valid Need or Cost instantiation does not change the law; violating the monotonic relations does.
+One‑line summary
+
+Model‑based engagement is the logistic of Need minus Cost: w_MB = σ(Need − Cost). Need is the controller’s adequacy advantage; Cost is the current price of control. Engagement must rise with Need and fall with Cost. If either monotonicity fails under proper clamps, the premise is false.
+
+
 State/action values and policies
 
 Q_MF(s,a): habit/AP value (DLS)
