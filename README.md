@@ -1,3 +1,240 @@
+Short answer: you’re not inventing a new metric. Your
+
+𝑈
+𝑖
+(
+𝑡
+)
+  
+=
+  
+∑
+𝜏
+=
+0
+𝐻
+(
+𝑡
+)
+𝛾
+(
+𝑡
+)
+𝜏
+  
+𝐸
+ ⁣
+[
+Δ
+F
+E
+𝑖
+,
+𝑡
++
+𝜏
+]
+𝐶
+𝑖
+(
+𝑡
+)
+U
+i
+	​
+
+(t)=
+C
+i
+	​
+
+(t)
+τ=0
+∑
+H(t)
+	​
+
+γ(t)
+τ
+E[ΔFE
+i,t+τ
+	​
+
+]
+	​
+
+
+is just a tidy remix of pieces that are already standard:
+
+How each piece maps to established results
+
+“Discounted stream of value” (numerator).
+In active inference, policies are chosen by minimizing expected free energy over a finite horizon; the textbook expression is a discounted sum across future time steps (risk + ambiguity + epistemic terms). That is exactly your 
+∑
+𝜏
+𝛾
+𝜏
+𝐸
+[
+Δ
+F
+E
+]
+∑
+τ
+	​
+
+γ
+τ
+E[ΔFE]. 
+Chris Mathys
+ScienceDirect
+PMC
+
+“Per unit cost” (denominator).
+Two well-established traditions encode cost to act/compute:
+
+Opportunity-cost / reward-rate RL: tonic dopamine tracks the average reward rate, i.e., the price of time, and sets vigor accordingly—an explicit value-per-time (or energy) calculus. 
+PubMed
+Princeton University
+Europe PMC
+
+Effort cost in control allocation (EVC): dACC selects control intensity by trading expected payoff against effort cost; the decision variable is literally “benefits vs costs of control.” 
+PMC
+PubMed
+
+Empirically, dopamine shifts the benefit↔cost balance when people decide whether to expend cognitive effort—again, a benefit-per-cost computation. 
+PubMed
+Science
+PMC
+
+“One currency across disparate goals.”
+Human vmPFC/ventral striatum encode a common neural currency for subjective value across very different goods and costs (money, goods, social, and effort). This is the standard way the field operationalizes comparability of apples vs oranges. 
+PubMed
++1
+PMC
+
+vmPFC also carries intertemporal subjective value during delay-discounting—i.e., net present value in the brain. 
+PubMed
+PMC
+
+The same valuation network jointly encodes benefits and cognitive-effort costs. 
+jneurosci.org
++1
+
+“Arbiter picks the winner.”
+There is a neural arbiter: dACC (EVC) integrates benefits and costs of control; BG gates the chosen policy; and arbitration between MB/MF has been shown to track system reliabilities (a special case of expected future loss reduction). 
+PMC
++1
+
+“Rate/efficiency selection is old biology.”
+In ecology, animals maximize gain per unit cost/time (optimal foraging; marginal value theorem). That’s the same ratio form your 
+𝑈
+𝑖
+U
+i
+	​
+
+ uses. 
+paulseabright.com
+Gwern
+
+“Bounded rationality as free-energy / information trade-off.”
+In control and decision theory, KL-control / linearly-solvable MDPs and information-theoretic bounded rationality pick policies by maximizing expected utility minus a resource cost, i.e., a free-energy-like functional—another articulation of “value per cost.” 
+papers.neurips.cc
+PNAS
+arXiv
+
+“Costs are real/metabolic.”
+Neural signaling is expensive; cortical computation is energy-limited. The biophysics supports treating cost 
+𝐶
+𝑖
+C
+i
+	​
+
+ as something the system must price. 
+PubMed
++1
+
+Ratio vs. difference (why your 
+𝐵
+/
+𝐶
+B/C matches classic “benefit – λ·cost”)
+
+Many frameworks maximize benefit – λ·cost rather than a ratio. Under a resource (time/energy) constraint, the two are equivalent at the optimum: choosing controller 
+𝑖
+i by largest 
+𝐵
+𝑖
+/
+𝐶
+𝑖
+B
+i
+	​
+
+/C
+i
+	​
+
+ is identical to choosing by 
+𝐵
+𝑖
+−
+𝜆
+𝐶
+𝑖
+B
+i
+	​
+
+−λC
+i
+	​
+
+ for some shadow price 
+𝜆
+λ (the current opportunity cost of time/energy). In the brain, tonic DA ≈ 
+𝜆
+λ (average reward rate), which converts the ratio into the familiar difference form used by dACC/EVC. Empirically, manipulating DA or the opportunity cost of time tilts choices exactly as that duality predicts. 
+PubMed
+bioRxiv
+PMC
+
+Minimal biological wiring diagram
+
+Computation of the numerator (discounted value): vmPFC/VS encode subjective (discounted) value; hippocampus/PFC supply model-based predictions (where applicable); active-inference accounts formalize this as expected free energy over horizon 
+𝐻
+(
+𝑡
+)
+H(t). 
+PubMed
++1
+Chris Mathys
+
+Computation of the denominator (cost): dACC/EVC and striatum integrate effort/time costs; DA implements the opportunity-cost price; NE (LC) sets adaptive gain/precision (explore–exploit), changing effective costs/benefits. 
+PMC
+PubMed
++1
+
+Selection/gating: dACC signals control demand; BG and STN gate the chosen policy; when deliberation time has a cost, behavior follows standard bounded-accumulation with explicit time-penalties. 
+PMC
++1
+jneurosci.org
+
+Bottom line
+
+The form “discounted future goodness over present cost” is not novel: it’s the intersection of active inference’s expected free energy, reward-rate/effort accounts (DA, EVC), optimal foraging’s rate maximization, and information-theoretic bounded rationality.
+
+What is yours is the specific packaging: using 
+Δ
+F
+E
+ΔFE as the benefit signal across controllers and making the ratio explicit. But every “LEGO brick” of that package already exists—and has neural support.
+
 Unified Predictive Control Theory (IACE ≈ UPCA)
 1. Core Claim
 
