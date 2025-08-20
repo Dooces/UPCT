@@ -1,3 +1,537 @@
+1) Learning curves and marginal gain
+
+Model a generic saturating learning curve (pick any smooth mono-increasing form):
+
+𝑑
+𝑉
+𝑘
+𝑑
+𝜏
+=
+𝜂
+𝑘
+(
+𝑉
+𝑘
+max
+⁡
+−
+𝑉
+𝑘
+)
+⇒
+𝑉
+𝑘
+(
+𝜏
+)
+=
+𝑉
+𝑘
+max
+⁡
+−
+(
+𝑉
+𝑘
+max
+⁡
+−
+𝑉
+𝑘
+(
+0
+)
+)
+𝑒
+−
+𝜂
+𝑘
+𝜏
+.
+dτ
+dV
+k
+	​
+
+	​
+
+=η
+k
+	​
+
+(V
+k
+max
+	​
+
+−V
+k
+	​
+
+)⇒V
+k
+	​
+
+(τ)=V
+k
+max
+	​
+
+−(V
+k
+max
+	​
+
+−V
+k
+	​
+
+(0))e
+−η
+k
+	​
+
+τ
+.
+
+The instant marginal benefit of practicing now (for a tiny 
+Δ
+𝜏
+Δτ) is:
+
+Δ
+𝑉
+𝑘
+⏟
+future value gain
+≈
+𝜂
+𝑘
+(
+𝑉
+𝑘
+max
+⁡
+−
+𝑉
+𝑘
+)
+Δ
+𝜏
+.
+future value gain
+ΔV
+k
+	​
+
+	​
+
+	​
+
+≈η
+k
+	​
+
+(V
+k
+max
+	​
+
+−V
+k
+	​
+
+)Δτ.
+2) Intertemporal efficiency of practice vs use
+
+Let 
+𝛾
+∈
+(
+0
+,
+1
+)
+γ∈(0,1) be discounting (can depend on urgency/resource state). Then
+
+Practice option (invest in improvement):
+
+𝑈
+𝑘
+prac
+(
+𝑡
+)
+=
+∑
+𝜏
+≥
+1
+𝛾
+𝜏
+ 
+Δ
+𝑉
+𝑘
+(
+𝜏
+)
+𝑐
+𝑘
+prac
+  
+≈
+  
+𝛾
+ 
+𝜂
+𝑘
+(
+𝑉
+𝑘
+max
+⁡
+−
+𝑉
+𝑘
+)
+𝑐
+𝑘
+prac
+(myopic one-step index)
+.
+U
+k
+prac
+	​
+
+(t)=
+c
+k
+prac
+	​
+
+τ≥1
+∑
+	​
+
+γ
+τ
+ΔV
+k
+	​
+
+(τ)
+	​
+
+≈
+c
+k
+prac
+	​
+
+γη
+k
+	​
+
+(V
+k
+max
+	​
+
+−V
+k
+	​
+
+)
+	​
+
+(myopic one-step index).
+
+Use option (exploit current skill):
+
+𝑈
+𝑘
+use
+(
+𝑡
+)
+=
+𝑉
+𝑘
+(
+𝑡
+)
+𝑐
+𝑘
+use
+.
+U
+k
+use
+	​
+
+(t)=
+c
+k
+use
+	​
+
+V
+k
+	​
+
+(t)
+	​
+
+.
+
+Both are in the same currency: discounted value gain per unit cost.
+
+3) Policy: choose what to do now
+
+At each decision point, for each skill 
+𝑘
+k:
+
+Compute practice index 
+𝐼
+𝑘
+prac
+=
+𝛾
+ 
+𝜂
+𝑘
+(
+𝑉
+𝑘
+max
+⁡
+−
+𝑉
+𝑘
+)
+𝑐
+𝑘
+prac
+I
+k
+prac
+	​
+
+=
+c
+k
+prac
+	​
+
+γη
+k
+	​
+
+(V
+k
+max
+	​
+
+−V
+k
+	​
+
+)
+	​
+
+.
+
+Compute use index 
+𝐼
+𝑘
+use
+=
+𝑉
+𝑘
+𝑐
+𝑘
+use
+I
+k
+use
+	​
+
+=
+c
+k
+use
+	​
+
+V
+k
+	​
+
+	​
+
+.
+
+Then pick the option with the highest index across all 
+{
+𝑘
+,
+mode
+∈
+{
+prac
+,
+use
+}
+}
+{k,mode∈{prac,use}}.
+(If you want exploration of uncertain 
+𝑉
+𝑘
+max
+⁡
+,
+𝜂
+𝑘
+V
+k
+max
+	​
+
+,η
+k
+	​
+
+, add a posterior-uncertainty bonus — a bandit/Gittins-style index — but the currency stays identical.)
+
+4) How this captures your three “wildly different” cases
+
+Easy to improve & big payoff: large 
+𝜂
+𝑘
+η
+k
+	​
+
+ and large gap 
+(
+𝑉
+𝑘
+max
+⁡
+−
+𝑉
+𝑘
+)
+(V
+k
+max
+	​
+
+−V
+k
+	​
+
+) ⇒ huge 
+𝐼
+𝑘
+prac
+I
+k
+prac
+	​
+
+ ⇒ practice now.
+
+Easy to improve & low payoff: large 
+𝜂
+𝑘
+η
+k
+	​
+
+ but small 
+(
+𝑉
+𝑘
+max
+⁡
+−
+𝑉
+𝑘
+)
+(V
+k
+max
+	​
+
+−V
+k
+	​
+
+) ⇒ modest 
+𝐼
+prac
+I
+prac
+ ⇒ practice only if costs are tiny or discounting light.
+
+Hard to improve & low payoff: small 
+𝜂
+𝑘
+η
+k
+	​
+
+ and small gap ⇒ tiny 
+𝐼
+prac
+I
+prac
+ ⇒ don’t practice; just use something else.
+
+APs vs MA fit naturally:
+
+APs typically have low 
+𝑐
+use
+c
+use
+, often small remaining gap (already close to 
+𝑉
+max
+⁡
+V
+max
+); practicing them only wins if a big payoff remains (promotion to expert-level).
+
+MA routines have higher 
+𝑐
+prac
+c
+prac
+/
+𝑐
+use
+c
+use
+ but can have enormous 
+𝑉
+max
+⁡
+V
+max
+; when 
+𝜂
+𝑘
+η
+k
+	​
+
+ is high (you’re in a learning-rich regime) and discounting is gentle, investing in MA wins.
+
 Short answer: you’re not inventing a new metric. Your
 
 𝑈
