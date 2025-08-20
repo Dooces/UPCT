@@ -1,3 +1,55 @@
+State/action values and policies
+
+Q_MF(s,a): habit/AP value (DLS)
+Q_MB(s,a): model‑based value (PFC–HPC)
+Q_mix(s_t,a) = (1 − w_MB(t))·Q_MF(s_t,a) + w_MB(t)·Q_MB(s_t,a)
+π(a|s_t) ∝ exp(Q_mix(s_t,a)/τ)
+ACC monitoring (what actually happened)
+
+V_mix(s) = ∑_a π(a|s)·Q_mix(s,a)
+δ_ACC,t = |r_t + γ·V_mix(s_{t+1}) − V_mix(s_t)| (unsigned executed‑policy error)
+u_t = H_MF(s_t) = −∑_a π_MF(a|s_t) ln π_MF(a|s_t) (conflict proxy)
+Optional epistemic term: u_t += λ·Tr Σ_Q(s_t) (across‑ensemble variance)
+Opportunity cost and physiology
+
+κ update: κ_t = (1−ρ)·κ_{t−1} + ρ·(r_t/Δt)
+c_phys(S_t) = c0·(1 − S_t)^γ, γ ≥ 1; then z(c_phys) for scaling
+Arbitration (graded engagement via dACC)
+
+x_t = [ z(δ_ACC,t), z(u_t), −z(κ_t), −z(c_phys(S_t)), 1 ]
+w_MB(t) = σ(θᵀ x_t) (β fixed to 1)
+Planning budget (if you need a concrete planner)
+
+B_plan(t) = B_max · w_MB(t) (budget)
+Optional depth: d(t) = ceil(d_max · w_MB(t))
+Learning
+
+MF learning (online RL; keep your original update for DLS):
+δ_MF,t = r_t + γ·max_a Q_MF(s_{t+1},a) − Q_MF(s_t,a_t)
+Q_MF(s_t,a_t) ← Q_MF(s_t,a_t) + η_RL · δ_MF,t
+Patch (MB→MF, confidence‑gated):
+conf_MB(s,a) ≈ 1 / (1 + Tr Σ_Q(s,a)) (proxy; higher = more confident)
+η_patch_eff = η_patch · σ(α·conf_MB(s,a))
+Q_MF(s,a) ← Q_MF(s,a) + η_patch_eff · (Q_MB(s,a) − Q_MF(s,a))
+Distill (offline, trust‑region optional):
+minimize L_distill = E_{s∈C} [ KL(π_MB(·|s) || π_MF(·|s)) ]
+(prioritize C by high w_MB or large |Q_MB − Q_MF|)
+Edge cases
+
+Terminal: δ_ACC,t = |r_t − V_mix(s_t)|; MF terminal target δ_MF,t = r_t − Q_MF(s_t,a_t)
+If B_plan(t) = 0: use π_MF and skip Q_MB calls to avoid undefined queries.
+Empirical predictions (falsifiable)
+
+↑κ_t (time pressure/high average reward): ↓w_MB, faster RTs, MF bias; dACC/STN activity attenuates.
+↑S_t (rested/alert): ↓c_phys → ↑w_MB; more PFC–HPC engagement/exploration.
+↑δ_ACC or ↑H_MF: ↑w_MB; transient dACC/STN signatures; slower, more variable choices; planning budget rises.
+Perturbations: dACC disruption flattens the w_MB vs (D−K) slope; STN DBS lowers the effective threshold; DLS disruption increases baseline w_MB.
+Where it could be wrong (so you can adjust)
+
+If δ_ACC and H_MF don’t predict engagement, swap in your lab’s conflict/surprise metrics (same form).
+If κ_t and c_phys don’t modulate in the predicted directions, re‑fit K_t with the terms that do (keep w_MB = σ(θᵀx)).
+If mixture behaves poorly in your task, switch to the hard gate (w_MB > τ_gate) without changing the monitoring/cost pieces.
+
 Define per skill k
 
 Learning curve (improvability): b_k(n) = expected per-use performance benefit at competence n (e.g., error reduction, reward gain). Easy skills have fast learning rate α_k; hard skills have slow α_k and/or small asymptote b_k*.
