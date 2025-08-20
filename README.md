@@ -1,3 +1,50 @@
+Define per skill k
+
+Learning curve (improvability): b_k(n) = expected per-use performance benefit at competence n (e.g., error reduction, reward gain). Easy skills have fast learning rate α_k; hard skills have slow α_k and/or small asymptote b_k*.
+Compute saving curve: c_k(n) = per-use planning/compute saved at competence n (how much less MA you’ll need). Some skills proceduralize well (big c_k*), others not.
+Practice unit costs: E_k^train (energy), T_k^train (time). These differ by skill (some practice is cheap/fast, others costly/slow).
+Usage forecast: f_k(τ) = expected discounted future frequency of use (how often you’ll need it), horizon ρ.
+Prices (shadow costs): λE (energy), κ (opportunity cost of time). These scalarize “apples and oranges” into one currency.
+Value and cost of improvement
+
+Marginal value of one extra practice unit at competence n:
+MV_k(n) = ∫ e^(-ρτ) f_k(τ) [b_k′(n) + η c_k′(n)] dτ
+b_k′(n), c_k′(n): marginal gains from one unit more practice (steeper = easier to improve).
+η ≥ 0 converts compute saved into the same currency as performance benefit.
+Marginal cost of one practice unit:
+MC_k = λE·E_k^train + κ·T_k^train
+Decision rule (single currency ROI)
+
+Marginal ROI:
+ROI_k(n) = MV_k(n) / MC_k
+Allocate practice to the skill with the highest ROI_k(n) while ROI_k(n) > 1 (benefit exceeds priced cost). Equimarginal stopping: at optimum, ROI equalizes across practiced skills.
+Intuition (covers your cases)
+
+Easy + big payoff: α_k high, b_k* large → b_k′(n) large early; if E_k^train/T_k^train modest, ROI_k » 1 → practice now.
+Easy + low payoff: b_k* small or f_k low → MV_k small → ROI_k may fall below 1 → don’t invest (or invest a little if compute saving c_k is big).
+Hard + low payoff: α_k low, b_k* small, cost high → ROI_k ≪ 1 → don’t invest.
+Hard + big payoff but frequent: MV_k can still beat cost if f_k is large and horizon long (low ρ). Patience (5‑HT) and forecasted frequency matter.
+Compact closed form (common in practice)
+
+If b_k(n) ≈ b_k* (1 − e^(−α_k n)) and c_k(n) ≈ c_k* (1 − e^(−α′_k n)), and define discounted usage F_k = ∫ e^(−ρτ) f_k(τ) dτ, then
+MV_k(n) ≈ F_k [α_k (b_k* − b_k(n)) + η α′_k (c_k* − c_k(n))]
+MC_k = λE·E_k^train + κ·T_k^train
+ROI_k(n) = MV_k(n) / MC_k
+Neural readout (same currency, different circuits)
+
+MV_k(n): estimated in ACC/BA10 (expected value of control over horizon) with confidence from ACh‑weighted precision; usage forecasts from frontoparietal/hippocampal schemas.
+MC_k: priced by hypothalamus/insula/orexin/adenosine (λE) and average reward/DA/ACC (κ).
+Plasticity: striatum/cerebellum update AP skills; hippocampus↔PFC updates models/strategies; DA/NE gate learning rates (affect α_k).
+Predictions (falsifiable)
+
+Frequency/stability shifts: Increasing F_k (more frequent use) or lowering task volatility raises ROI_k and practice allocation—independent of raw difficulty.
+Price sensitivity: Raising κ (higher average reward rate/urgency) favors skills that save time per future use (large c_k*), even if b_k* is modest. Raising λE suppresses practice of energy‑intensive skills first.
+Learning‑curve sensitivity: Tasks with steeper α_k get early practice; as b_k(n) approaches b_k* (gap_k shrinks), practice shifts to other skills (equimarginal).
+Transfer: If a skill’s improvement transfers (W_{kj} > 0 to other tasks j), effective F_k increases and ROI_k rises—more practice allocated.
+Bottom line
+
+Yes: “wildly different” improvement profiles reduce to one effective currency by pricing time and energy (κ, λE), weighting by discounted future use (F_k), and multiplying by confidence/precision. The arbiter invests where marginal ROI is highest. This was implicit; the equations above make it explicit.
+
 1) Learning curves and marginal gain
 
 Model a generic saturating learning curve (pick any smooth mono-increasing form):
